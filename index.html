@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <script src="js/jquery.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/func.js"></script>
+    <title>商品推荐</title>
+
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand mb-0 h1">商品推荐系统</span>
+    <button class="btn btn-outline-light my-2 my-sm-0" id="reset" onclick="clearTB()" type="refresh">RESET</button>
+</nav>
+<!-- <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">商品推荐系统</h1>
+        <p class="lead">基于多决策算法自动给出推荐结果</p>
+    </div>
+</div> -->
+<div class="container" style="margin-top: 30px">
+    <div class="row">
+        <div class="col-lg-8 col-sm-6 col-12">
+            <div class="input-group">
+                <input type="text" id="curFile" class="form-control" οnkeydοwn="return false;" οnpaste="return false;" placeholder="Select file...">
+                <label class="input-group-btn" style="margin-left: 10px">
+                    <span class="btn btn-primary">
+                        <i class="glyphicon glyphicon-folder-open"></i>  
+                        选择文件
+                        <input id="file" type="file" style="display: none;" onchange="freshDefault()" multiple>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="padding-top:2em;margin-top: 20px">
+
+    <form class="form-inline">
+      <div class="form-group" style="padding-right: 5em">
+        <label for="exampleInputName2">评价</label>
+        <div class="col-lg-2">
+          <select id="commentSelect" class="form-control" οnchange="selectOnchang(this)">
+              <option>评价最重要</option>
+              <option>一般般但要考虑</option>
+              <option>I dont't care!!!</option>
+          </select>
+        </div>
+      </div>
+
+          <div class="form-group" style="padding-right: 5em">
+            <label for="exampleInputEmail2">价格</label>
+            <div class="col-lg-2">
+            <select id="priceSelect" class="form-control" οnchange="selectOnchang(this)">
+              <option>越贵越好！</option>
+              <option>可以接受一般水平</option>
+              <option>我要便宜货！</option>
+            </select>
+        </div>
+      </div>
+      <div class="form-group" style="padding-right: 5em">
+        <label for="exampleInputEmail2">销量</label>
+        <div class="col-lg-2">
+            <select id="salesSelect" class="form-control" οnchange="selectOnchang(this)">
+              <option>我一定要跟紧潮流</option>
+              <option>无所谓</option>
+            </select>
+        </div>
+      </div>
+      <button type="button" class="btn btn-info" onclick="readCsv();" style="width: 10em">查询</button>
+    </form>
+    <div class="table-responsive">
+  <table class="table" id="tbTop10" >
+    <!-- On cells (`td` or `th`) -->
+    <tr>
+      <td class="active" style="text-align: center;">序号</td>
+      <td class="active" style="text-align: center;">名称</td>
+      <td class="success" style="text-align: center;">价格</td>
+      <td class="success" style="text-align: center;">销量</td>
+      <td class="warning" style="text-align: center;">得分</td>
+    </tr>
+  </table>
+</div>
+</div>
+</body>
+</html>
