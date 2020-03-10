@@ -204,7 +204,7 @@ def init_csv(file_name,head):
 
 if __name__ == '__main__':
     path = 'data/JDComment_data.csv'
-    csv_head = ['用户ID','评论内容','会员级别','点赞数','回复数','得分','价格','购买时间','手机型号','销量']
+    csv_head = ['手机ID','评论内容','会员级别','点赞数','回复数','得分','价格','购买时间','手机型号','销量']
     init_csv(path,csv_head)
     qbs = QiubaiSpider(path)
     qbs.run()

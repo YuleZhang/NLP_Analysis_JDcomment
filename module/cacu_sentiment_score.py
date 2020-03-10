@@ -146,9 +146,3 @@ class sentiment_caculate():
         # 3.计算得分
         score = self.socre_sentiment(sen_word, not_word, degree_word, seg_list)
         return score
-
-#read_data = ''
-# with open('input_comment//Apple iPhone 11.txt') as f:
-#     read_data=f.read()
-# # 测试
-# print(setiment_score(read_data))

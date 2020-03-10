@@ -1,21 +1,23 @@
+# -*- coding:utf-8 -*-
 from collections import defaultdict
-from cacu_sentiment_score import sentiment_caculate
+from module.cacu_sentiment_score import sentiment_caculate
+from module.mysql_operate import csv2mysql
 import pandas as pd
 import jieba
-import codecs
 import shutil
 import os
 import re
 
 
 def read_csv(path):
-    df = pd.read_csv(path, encoding='utf-8')
+    df = pd.read_csv(path,encoding='utf-8')
     df.columns = df.columns.str.strip(' ')#去除列名中的空格
+    print(df.columns)
     return df
 
 def data_preprocess(df):
     df = df.drop_duplicates()  #去重
-    df.drop_duplicates(['评论内容','手机型号'])#若评论内容和手机型号一样，则认为数据无效，避免水军刷评论
+    #df.drop_duplicates(['评论内容','手机型号'])#若评论内容和手机型号一样，则认为数据无效，避免水军刷评论
     df['评论内容'] = df['评论内容'].fillna('99999') #将空值所在行填充为99999 
     df['手机型号'] = df['手机型号'].fillna('99999') 
     row_comment_index = df[df.评论内容=='99999'].index.tolist()  #找出评论空值所在行索引
@@ -46,7 +48,6 @@ def merge_comment(df,path):
     except:
         print(path+"目录不存在，进行创建")
     os.mkdir(path)
-    # filenames = os.listdir(path)
     file_name = ''
     phone_name = df.loc[0,'手机型号']
     try:
@@ -88,11 +89,12 @@ def cacu_comment_score(path_sti,path_com,df):
 
 def save_ans(path,df):
     df.to_csv(path,na_rep='NULL',sep = ',',index=False,header = True,encoding = 'utf_8_sig')
+    csv2mysql('jd_comment','product_info',df)
     print(path+"保存成功")
 
 if __name__ == "__main__":
     sti_path = r'motion_analysis'
-    source_path = r"data//JDComment_data.csv"
+    source_path = r"data//tmp_test_data.csv"
     comment_path = r"input_comment"
     save_path = r"data//result.csv"
     comment_df = read_csv(source_path)

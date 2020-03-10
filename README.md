@@ -2,7 +2,7 @@
 
 ### 数据集部分
 
-数据集在data目录下，里面包含了测试集数据[tmp_test_data.csv](data/tmp_test_data.csv)，大约有5000条评论数据，共11款手机，便于演示。同时也包含了完整的数据集[JDComment_data](data/JDComment_data.csv)，大约2，包含进60款手机的评论数据。[result.csv](data/result.csv) 是采用完整数据集计算出的各个手机的评论得分，可以用做功能演示。
+数据集在data目录下，里面包含了测试集数据[tmp_test_data.csv](data/tmp_test_data.csv)，大约有5000条评论数据，共11款手机，便于演示。同时也包含了完整的数据集[JDComment_data](data/JDComment_data.csv)，大约2，包含进60款手机的评论数据。[test_result.csv](data/test_result.csv) 是采用完整数据集计算出的各个手机的评论得分，可以用做功能演示。
 
 ### 评论数据采集
 
@@ -16,6 +16,8 @@
 
 ![spiderEffect](img/spiderEffect.jpg)
 
+**注意！**：保存的JDComment_data文件格式为`utf-8-sig`，需要打开后重新保存一下，转换成`utf-8`就可以正常操作了
+
 ### 评论数据情感分析并计算得分
 
 tmp.py和comment_analysis_process都是计算情感分析的python源码，区别只是在于文件格式不同而已，可以根据不同的环境采用不同的脚本。
@@ -24,13 +26,19 @@ tmp.py运行方式为在控制台输入`python tmp.py`(windows)
 
 comment_analysis_process可以用jupyter notebook或其他ipython IDE打开执行
 
+执行之后会将相同手机的评论整合到同一个TXT文件中，以手机名称命名，在input目录下。同时也能自动读取这些文件对其处理求评论得分，包含评论得分的完整手机信息存储在[data/result.cscv](data/result.cscv)目录下。
+
+### 关于数据库存储
+
+在配置好本地机器Mysql环境之后，在控制台进行测试，详见[mysql配置环境变量（win 10）](<https://blog.csdn.net/li93675/article/details/80700152>) 。tmp.py脚本执行后，会自动保存到数据库jd_comment中（存储result.csv表）
+
 ### 页面测试
 
 双击打开目录下的index.html，上传data目录下的result数据集进行测试即可，只能在本地演示。
 
 ### 版本控制
 
-为便于管理和保存，该项目将
+为了便于管理和维护，我已将项目提交到[<https://github.com/YuleZhang/NLP_Analysis_JDcomment>](<https://github.com/YuleZhang/NLP_Analysis_JDcomment>)，可以自行下载查阅。
 
 ### 部分参考
 
