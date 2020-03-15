@@ -1,16 +1,16 @@
 # -*- coding:utf-8 -*-
+import sys
+import os
+# 添加本地module包路径
+sys.path.append(os.path.abspath('module'))
 from collections import defaultdict
 from cacu_sentiment_score import sentiment_caculate
 from mysql_operate import csv2mysql
+from optparse import OptionParser
 import pandas as pd
 import jieba
 import shutil
-import sys
-import os
 import re
-
-# 添加本地module包路径
-sys.path.append(r'module')
 
 def read_csv(path):
     # 读取csv文件
@@ -93,19 +93,40 @@ def cacu_comment_score(path_sti,path_com,df):
     print(tmp_df.head())
     return tmp_df
 
-def save_ans(path,df):
-    # 文件保存到数据库和csv表中
+def save_to_csv(path,df):
+    # 文件保存到csv表中
     df.to_csv(path,na_rep='NULL',sep = ',',index=False,header = True,encoding = 'utf_8_sig')
-    csv2mysql('root','','jd_comment','product_info',df)
     print(path+"保存成功")
 
+def save_to_mysql(user,pas,dbname,dbtable,df):
+    # 文件保存到数据库
+    
+    print("已保存到数据库")
+
 if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("-u","--jobs", default="root", dest="user", help="mysql用户名，默认为root")
+    parser.add_option("-p", "--pass", default="",dest="password", help="mysql密码，默认为空")
+    parser.add_option("-d", "--Database", default="jd_comment",type="string",dest="database",help="数据库名称")
+    parser.add_option("-t", "--table", default="product_info",type="string",dest="table",help="表名")
+    parser.add_option("-o", "--output", default='data//result.csv', help="保存路径，默认为data//result.csv")
+    
+    (options,args) = parser.parse_args()
+    db_user = options.user
+    db_password = options.password
+    db_name = options.database
+    db_table = options.table
+    save_path = options.output 
+
     sti_path = r'motion_analysis'
     source_path = r"data//tmp_test_data.csv"
     comment_path = r"input_comment"
-    save_path = r"data//result.csv"
     comment_df = read_csv(source_path)
     format_comment = data_preprocess(comment_df)
     merge_comment(format_comment,comment_path)
-    reconstruct_comment_info = cacu_comment_score(sti_path,comment_path,format_comment)
-    save_ans(save_path,reconstruct_comment_info)
+    ans_df = cacu_comment_score(sti_path,comment_path,format_comment)
+    # 文件保存到csv
+    ans_df.to_csv(save_path,na_rep='NULL',sep = ',',index=False,header = True,encoding = 'utf_8_sig')
+    # 文件保存到数据库
+    csv2mysql(db_user,db_password,db_name,db_table,ans_df)
+    print("保存成功")

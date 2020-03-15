@@ -22,11 +22,15 @@
 
 tmp.py和comment_analysis_process都是计算情感分析的python源码，区别只是在于文件格式不同而已，可以根据不同的环境采用不同的脚本。
 
-tmp.py运行方式为在控制台输入`python tmp.py`(windows)
+tmp.py运行方式为在控制台输入`python tmp.py`
 
-comment_analysis_process可以用jupyter notebook或其他ipython IDE打开执行
+同时也可以使用`python tmp.py -h`查看并修改默认参数，示例如下(指定密码为1)
 
-执行之后会将相同手机的评论整合到同一个TXT文件中，以手机名称命名，在input目录下。同时也能自动读取这些文件对其处理求评论得分，包含评论得分的完整手机信息存储在[data/result.cscv](data/result.cscv)目录下。
+![](/img/modifyParam.jpg)
+
+comment_analysis_process可以用jupyter notebook或其他ipython IDE打开执行，内容同tmp.py一样
+
+执行之后会将相同手机的评论整合到同一个TXT文件中，以手机名称命名，在input目录下。同时也能自动读取这些文件对其处理求评论得分，包含评论得分的完整手机信息默认存储在[data/result.cscv](data/result.cscv)目录下。
 
 ### 关于数据库存储
 
@@ -34,7 +38,9 @@ comment_analysis_process可以用jupyter notebook或其他ipython IDE打开执�
 
 ### 页面测试
 
-双击打开目录下的index.html，上传data目录下的result数据集进行测试即可，只能在本地演示。
+双击打开目录下的index.html，上传data目录下的result数据集进行测试即可，只能在本地演示。演示效果如下图
+
+![](/img/webEffect.jpg)
 
 ### 版本控制
 
@@ -48,3 +54,4 @@ comment_analysis_process可以用jupyter notebook或其他ipython IDE打开执�
 
 [用python实现文本情感分析](<https://www.jianshu.com/p/58bfd9e53db0?t=123>)
 
+[optparse模块](<https://www.jianshu.com/p/35ec031af6e3>)
