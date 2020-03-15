@@ -1,3 +1,8 @@
+'''
+@Author: YuleZhang
+@Description: 完成将dataframe数据类型存储到数据库中
+@Date: 2020-03-10 08:44:47
+'''
 # 一个根据pandas自动识别type来设定table的type
 import pandas as pd
 import pymysql
@@ -23,10 +28,19 @@ def make_table_sql(df):
     return ','.join(make_table)
 
 # csv 格式输入 mysql 中
-def csv2mysql(db_name, table_name, df):
+
+def csv2mysql(user,password,db_name, table_name, df):
+    """这个函数用来批量插入数据
+    Arguments:
+        user {str} -- 登陆用户名
+        password {str} -- 登陆密码
+        db_name {str} -- 数据库名称
+        table_name {str} -- 数据库名称
+        df {dataframe} -- 要存的数据
+    """
     print("开始将数据导入数据库中")
     # 连接database
-    conn = pymysql.connect(host="localhost", user="root",password="")
+    conn = pymysql.connect(host="localhost", user=user,password=password)
     # 得到一个可以执行SQL语句的光标对象
     cursor = conn.cursor()
     try:
@@ -56,4 +70,4 @@ if __name__ == "__main__":
     path = r"data//test_result.csv"
     test_df = pd.read_csv(path,encoding='utf-8',header=0)
     test_df.columns = test_df.columns.str.strip(' ')#去除列名中的空格
-    csv2mysql('jd_comment','product_info',test_df)
+    csv2mysql('root','','jd_comment','product_info',test_df)

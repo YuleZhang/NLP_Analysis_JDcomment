@@ -1,23 +1,27 @@
 # -*- coding:utf-8 -*-
 from collections import defaultdict
-from module.cacu_sentiment_score import sentiment_caculate
-from module.mysql_operate import csv2mysql
+from cacu_sentiment_score import sentiment_caculate
+from mysql_operate import csv2mysql
 import pandas as pd
 import jieba
 import shutil
+import sys
 import os
 import re
 
+# 添加本地module包路径
+sys.path.append(r'module')
 
 def read_csv(path):
+    # 读取csv文件
     df = pd.read_csv(path,encoding='utf-8')
     df.columns = df.columns.str.strip(' ')#去除列名中的空格
     print(df.columns)
     return df
 
 def data_preprocess(df):
+    # 数据预处理
     df = df.drop_duplicates()  #去重
-    #df.drop_duplicates(['评论内容','手机型号'])#若评论内容和手机型号一样，则认为数据无效，避免水军刷评论
     df['评论内容'] = df['评论内容'].fillna('99999') #将空值所在行填充为99999 
     df['手机型号'] = df['手机型号'].fillna('99999') 
     row_comment_index = df[df.评论内容=='99999'].index.tolist()  #找出评论空值所在行索引
@@ -29,6 +33,10 @@ def data_preprocess(df):
     return df
 
 def format_phone_name(full_name,sub):
+    """格式化手机名称
+    将手机原名称'Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待'
+    转化为'Apple_iPhone_11'的格式，以便于后续存储和处理
+    """
     full_name = str(full_name)
     index = full_name.find(sub)   #第一次出现的位置
     index2=full_name.find(sub,index+1)  #第二次出现的位置
@@ -38,10 +46,7 @@ def format_phone_name(full_name,sub):
 
 
 def merge_comment(df,path):
-    '''
-    合并同款手机的所有评论
-    '''
-    #存之前先清空文件夹
+    # 合并同款手机的评论内容
     try:
         shutil.rmtree(path)
         print(path+"目录已经清空")
@@ -65,6 +70,7 @@ def merge_comment(df,path):
     
     
 def cacu_comment_score(path_sti,path_com,df):
+    # 读取合并的txt文本，将其分词处理，计算总得分（内置在setiment_score函数中）
     print("开始计算得分")
     sti_cacu = sentiment_caculate(path_sti)
     content_path=path_com
@@ -88,8 +94,9 @@ def cacu_comment_score(path_sti,path_com,df):
     return tmp_df
 
 def save_ans(path,df):
+    # 文件保存到数据库和csv表中
     df.to_csv(path,na_rep='NULL',sep = ',',index=False,header = True,encoding = 'utf_8_sig')
-    csv2mysql('jd_comment','product_info',df)
+    csv2mysql('root','','jd_comment','product_info',df)
     print(path+"保存成功")
 
 if __name__ == "__main__":
